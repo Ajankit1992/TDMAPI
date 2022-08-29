@@ -1,11 +1,10 @@
 {
-  "database-name": "",
-  "database-connect": True,
+  "database": "",
+  "database-connect": "false",
   "type": "mask",
   "rows": 100,
   "mask-columns": [
     "ssn",
-    "dob",
-    "phone"
+    "ccn"
     ]
 }
