@@ -1,10 +1,7 @@
-from flask import Flask
+from flask import Flask, request, json
 from flask import jsonify
-from flask import request
 import main
 import HelperLibrary.helperLibrary as helperLib
-
-
 app = Flask(__name__)
 
 """ Function for checking API is running or not"""
@@ -14,17 +11,22 @@ def index():
 
 
 """ Function for Masking, Cloning and generating data based on SSN number."""
-@app.route('/TDMAPI')
-def tdmapi():
-	ssn = request.args.get('ssn', default='*', type=str)
-	result, error = main.TDMAPI(ssn)
-	if result:
+@app.route('/clone_json', methods=['POST'])
+def tdm_api_genrate():
+	content_type = request.headers.get('Content-Type')
+	if (content_type == 'application/json'):
+		data = json.loads(request.data)
+		print(data['database'], data['type'], data['rows'])
+		databse_name, database_connect, script_type, no_of_rows, columns_array = data['database'], data['database-connect'], data['type'], data['rows'], data['mask-columns']
 		helperLib.print_msg("INFO", "API Called successfully")
-		return jsonify(status="Success", Message=error)
+		json_df = main.tdm_api(databse_name, database_connect, script_type, no_of_rows, columns_array, outbound_folder_path)
+		return jsonify(status="Success", Message=json_df)
 	else:
-		helperLib.print_msg("ERROR", error)
-		return jsonify(status="Failure", Message=error)
+		helperLib.print_msg("ERROR", "")
+		return jsonify(status="Failure", Message="")
 
 
 if __name__ == '__main__':
 	app.run(debug=True, host='127.0.0.1', port=8080)
+	inbound_folder_path, outbound_folder_path = main.logger()
+
