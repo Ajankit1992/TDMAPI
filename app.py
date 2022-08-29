@@ -19,7 +19,7 @@ def tdm_api_genrate():
 		print(data['database'], data['type'], data['rows'])
 		databse_name, database_connect, script_type, no_of_rows, columns_array = data['database'], data['database-connect'], data['type'], data['rows'], data['mask-columns']
 		helperLib.print_msg("INFO", "API Called successfully")
-		json_df = main.tdm_api(databse_name, database_connect, script_type, no_of_rows, columns_array, outbound_folder_path)
+		json_df = main.tdm_api_genrate(databse_name, database_connect, script_type, no_of_rows, columns_array, outbound_folder_path)
 		return jsonify(status="Success", Message=json_df)
 	else:
 		helperLib.print_msg("ERROR", "")
