@@ -62,7 +62,7 @@ def logger():
     helperLib.print_msg("INFO", f"paths : {inbound_folder_path}, {outbound_folder_path}")
 
 
-def tdm_api_genrate(databse_name, database_connect, script_type, no_of_rows, columns_array, outbound_folder_path):
+def tdm_api_genrate(database_connect, script_type, no_of_rows, columns_array):
     # Initialize
     if database_connect == "true":
         conn = pyodbc.connect('Driver={SQL Server};'
@@ -72,7 +72,6 @@ def tdm_api_genrate(databse_name, database_connect, script_type, no_of_rows, col
 
         cursor = conn.cursor()
         cursor.execute(f'SELECT Top {no_of_rows} FROM table_name')
-
         for i in cursor:
             print(i)
     else:
@@ -93,7 +92,7 @@ def tdm_api_genrate(databse_name, database_connect, script_type, no_of_rows, col
                     df.emp_ssn = df.emp_ssn.apply(lambda x: re.sub(r'\d', '*', x, count=5))
                 elif col == "ccn":
                     df.credit_card_number = df.credit_card_number.apply(lambda x: re.sub(r'\d', '*', x, count=10))
-            df.to_excel(outbound_folder_path + "Masked_data.xlsx")
+            df.to_excel("C:/Users/ankitj/PycharmProjects/TDMPoc/Output" + "Masked_data.xlsx")
         json = df.to_json()
         return json
 
